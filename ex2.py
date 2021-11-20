@@ -9,7 +9,7 @@ def normalize(train_x,test_x):
             if i < test_size:
                 test_x[i][j] = (test_x[i][j] - min_v[j]) / (max_v[j] - min_v[j])
 
-def knn(train_x,test_x):
+def knn(train_x,train_y,test_x):
     k = 7
     test_y = []
     # find the distance for each test x from every train x
@@ -30,18 +30,63 @@ def knn(train_x,test_x):
         max_class = max(classes, key=classes.get)
         test_y.append(int(max_class))
     return test_y
+    
+def perceptron(train_x,train_y,test_x):
+    w = np.array([np.zeros(num_att), np.zeros(num_att), np.zeros(num_att)])
+    learning_rate = 0.2
+    epochs = 20
+    test_y = []
+    for _ in range(epochs):
+        # shuffle train data every epoch
+        s = np.arange(train_x.shape[0])
+        np.random.shuffle(s)
+        train_x_shuffled = train_x[s]
+        train_y_shuffled = train_y[s]
+        # predict and update
+        for x_i, y_i in zip(train_x_shuffled, train_y_shuffled):
+            y_hat = np.argmax(np.dot(w, x_i))
+            if y_hat != int(y_i):
+                w[int(y_i), :] = w[int(y_i), :] + learning_rate * x_i
+                w[y_hat, :] = w[y_hat, :] - learning_rate * x_i
+    # use the trained weight vectors to assign best label prediction to current x example
+    for x in range(test_size):
+        test_y.append(np.argmax(np.dot(w, test_x[x])))
+    return test_y
 
-def passive_agressive(x,y):
-    print("unimplemented pa")
+def passive_agressive(train_x,train_y,test_x):
+    w = np.array([np.random.rand(num_att), np.random.rand(num_att), np.random.rand(num_att)])
+    epochs = 1
+    test_y = []
+    for _ in range(epochs):
+        # shuffle train data every epoch
+        s = np.arange(train_x.shape[0])
+        np.random.shuffle(s)
+        train_x_shuffled = train_x[s]
+        train_y_shuffled = train_y[s]
+        # predict and update
+        for x_i, y_i in zip(train_x_shuffled, train_y_shuffled):
+            w_out = np.delete(w, int(y_i), 0)
+            y_hat = np.argmax(np.dot(w_out, x_i))
+            # get the correct label by it's place in original w
+            if y_i == 0 or (y_i == 1 and y_hat == 1):
+                y_hat += 1
+            loss = max(0, 1 - np.dot(w[int(y_i)], x_i) + np.dot(w[y_hat], x_i))
+            if loss:
+                tau = 1
+                denominator = 2 * (np.linalg.norm(x_i) ** 2)
+                # when denominator is not 0 change initialization by formula
+                if denominator:
+                    tau = loss / denominator
+                # update w
+                w[int(y_i), :] = w[int(y_i), :] + tau * x_i
+                w[y_hat, :] = w[y_hat, :] - tau * x_i
+    # use the trained weight vectors to assign best label prediction to current x example
+    for x in range(test_size):
+        test_y.append(np.argmax(np.dot(w, test_x[x])))
+    return test_y
 
 def svm(x,y):
     print("unimplemented svm")
-
-def perceptron(x,y):
-    print("unimplemented perceptron")
-
-def loss(x,y,w):
-    print("unimplemeted loss")
 
 train_x = np.genfromtxt('PA-SVM-Perceptron-KNN/train_x.txt', delimiter=',')
 train_y = np.genfromtxt('PA-SVM-Perceptron-KNN/train_y.txt')
@@ -51,5 +96,6 @@ train_size = int(train_x.size/num_att)
 test_size = int(test_x.size/num_att)
 
 normalize(train_x,test_x)
-
-knn(train_x,test_x)
+print(knn(train_x,train_y,test_x))
+print(perceptron(train_x,train_y,test_x))
+print(passive_agressive(train_x,train_y,test_x))
