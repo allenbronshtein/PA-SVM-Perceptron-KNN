@@ -88,14 +88,20 @@ def passive_agressive(train_x,train_y,test_x):
 def svm(x,y):
     print("unimplemented svm")
 
+
+#-------------------------------Main---------------------------------------#
 train_x = np.genfromtxt('PA-SVM-Perceptron-KNN/train_x.txt', delimiter=',')
 train_y = np.genfromtxt('PA-SVM-Perceptron-KNN/train_y.txt')
 test_x = np.genfromtxt('PA-SVM-Perceptron-KNN/test_x.txt', delimiter=',')
 num_att = train_x[0].size
 train_size = int(train_x.size/num_att)
 test_size = int(test_x.size/num_att)
+knn_test_y = []
+perceptron_test_y = []
+pa_test_y = []
 
 normalize(train_x,test_x)
-print(knn(train_x,train_y,test_x))
-print(perceptron(train_x,train_y,test_x))
-print(passive_agressive(train_x,train_y,test_x))
+knn_test_y = knn(train_x,train_y,test_x)
+perceptron_test_y = perceptron(train_x,train_y,test_x)
+pa_test_y = passive_agressive(train_x,train_y,test_x)
+#--------------------------------------------------------------------------#
