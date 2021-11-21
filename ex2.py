@@ -1,5 +1,9 @@
 import numpy as np
 
+TRAIN_X_DIR = 'PA-SVM-Perceptron-KNN/train_x.txt'
+TRAIN_Y_DIR = 'PA-SVM-Perceptron-KNN/train_y.txt'
+TEST_X_DIR = 'PA-SVM-Perceptron-KNN/test_x.txt'
+OUTPUT_DIR = 'PA-SVM-Perceptron-KNN/output.txt'
 # min-max normalization
 
 
@@ -103,9 +107,9 @@ def svm(train_x, train_y, test_x):
 
 
 # Main
-train_x = np.genfromtxt('PA-SVM-Perceptron-KNN/train_x.txt', delimiter=',')
-train_y = np.genfromtxt('PA-SVM-Perceptron-KNN/train_y.txt')
-test_x = np.genfromtxt('PA-SVM-Perceptron-KNN/test_x.txt', delimiter=',')
+train_x = np.genfromtxt(TRAIN_X_DIR, delimiter=',')
+train_y = np.genfromtxt(TRAIN_Y_DIR)
+test_x = np.genfromtxt(TEST_X_DIR, delimiter=',')
 num_att = train_x[0].size
 train_size = int(train_x.size/num_att)
 test_size = int(test_x.size/num_att)
@@ -120,7 +124,7 @@ pa_test_y = passive_agressive(train_x, train_y, test_x)
 msg = ''
 for i in range(test_size):
     msg += f"knn: {knn_test_y[i]}, perceptron: {perceptron_test_y[i]}, svm: 0, pa: {pa_test_y[i]}\n"
-_out = open('PA-SVM-Perceptron-KNN/output.txt', "w")
+_out = open(OUTPUT_DIR, "w")
 _out.write(msg)
 _out.close()
 # End
