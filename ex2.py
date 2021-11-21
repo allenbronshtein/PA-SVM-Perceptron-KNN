@@ -1,7 +1,8 @@
 import numpy as np
 
-
 # min-max normalization
+
+
 def normalize(train_x, test_x):
     max_v, min_v = np.amax(train_x, axis=0), np.amin(train_x, axis=0)
     for i in range(train_size):
@@ -101,7 +102,7 @@ def svm(train_x, train_y, test_x):
     return test_y
 
 
-#-------------------------------Main---------------------------------------#
+# Main
 train_x = np.genfromtxt('PA-SVM-Perceptron-KNN/train_x.txt', delimiter=',')
 train_y = np.genfromtxt('PA-SVM-Perceptron-KNN/train_y.txt')
 test_x = np.genfromtxt('PA-SVM-Perceptron-KNN/test_x.txt', delimiter=',')
@@ -116,7 +117,10 @@ knn_test_y = knn(train_x, train_y, test_x)
 perceptron_test_y = perceptron(train_x, train_y, test_x)
 pa_test_y = passive_agressive(train_x, train_y, test_x)
 
+msg = ''
 for i in range(test_size):
-    print(
-        f"knn: {knn_test_y[i]}, perceptron: {perceptron_test_y[i]}, svm: {svm_test_y[i]}, pa: {pa_test_y[i]}")
-#--------------------------------------------------------------------------#
+    msg += f"knn: {knn_test_y[i]}, perceptron: {perceptron_test_y[i]}, svm: 0, pa: {pa_test_y[i]}\n"
+_out = open('PA-SVM-Perceptron-KNN/output.txt', "w")
+_out.write(msg)
+_out.close()
+# End
