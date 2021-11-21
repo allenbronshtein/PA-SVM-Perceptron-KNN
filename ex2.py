@@ -1,16 +1,20 @@
 import numpy as np
 
-def normalize(train_x,test_x):
-    # min-max normalization
+
+# min-max normalization
+def normalize(train_x, test_x):
     max_v, min_v = np.amax(train_x, axis=0), np.amin(train_x, axis=0)
     for i in range(train_size):
         for j in range(num_att):
             train_x[i][j] = (train_x[i][j] - min_v[j]) / (max_v[j] - min_v[j])
             if i < test_size:
-                test_x[i][j] = (test_x[i][j] - min_v[j]) / (max_v[j] - min_v[j])
+                test_x[i][j] = (test_x[i][j] - min_v[j]) / \
+                    (max_v[j] - min_v[j])
 
-def knn(train_x,train_y,test_x):
-    k = 7
+
+# KNN learning algorithm
+def knn(train_x, train_y, test_x):
+    KN = 7
     test_y = []
     # find the distance for each test x from every train x
     for x in test_x:
@@ -22,21 +26,23 @@ def knn(train_x,train_y,test_x):
         dist_np = np.array(dist)
         # find k nearest neighbors
         sorted_array = dist_np[np.argsort(dist_np[:, 0])]
-        nearest_neighbors = sorted_array[:k]
+        nearest_neighbors = sorted_array[:KN]
         # find the number of occurrences for each class
-        for line in range(k):
+        for line in range(KN):
             classes[str(int(nearest_neighbors[line][1]))] += 1
         # predict the majority class and assign to current x example
         max_class = max(classes, key=classes.get)
         test_y.append(int(max_class))
     return test_y
-    
-def perceptron(train_x,train_y,test_x):
+
+
+# Perceptron learning algorithm
+def perceptron(train_x, train_y, test_x):
+    LEARNING_RATE = 0.2
+    EPOCHS = 20
     w = np.array([np.zeros(num_att), np.zeros(num_att), np.zeros(num_att)])
-    learning_rate = 0.2
-    epochs = 20
     test_y = []
-    for _ in range(epochs):
+    for _ in range(EPOCHS):
         # shuffle train data every epoch
         s = np.arange(train_x.shape[0])
         np.random.shuffle(s)
@@ -46,18 +52,21 @@ def perceptron(train_x,train_y,test_x):
         for x_i, y_i in zip(train_x_shuffled, train_y_shuffled):
             y_hat = np.argmax(np.dot(w, x_i))
             if y_hat != int(y_i):
-                w[int(y_i), :] = w[int(y_i), :] + learning_rate * x_i
-                w[y_hat, :] = w[y_hat, :] - learning_rate * x_i
+                w[int(y_i), :] = w[int(y_i), :] + LEARNING_RATE * x_i
+                w[y_hat, :] = w[y_hat, :] - LEARNING_RATE * x_i
     # use the trained weight vectors to assign best label prediction to current x example
     for x in range(test_size):
         test_y.append(np.argmax(np.dot(w, test_x[x])))
     return test_y
 
-def passive_agressive(train_x,train_y,test_x):
-    w = np.array([np.random.rand(num_att), np.random.rand(num_att), np.random.rand(num_att)])
-    epochs = 1
+
+# Passive agressive learning algorithm
+def passive_agressive(train_x, train_y, test_x):
+    EPOCHS = 1
+    w = np.array([np.random.rand(num_att), np.random.rand(
+        num_att), np.random.rand(num_att)])
     test_y = []
-    for _ in range(epochs):
+    for _ in range(EPOCHS):
         # shuffle train data every epoch
         s = np.arange(train_x.shape[0])
         np.random.shuffle(s)
@@ -85,8 +94,11 @@ def passive_agressive(train_x,train_y,test_x):
         test_y.append(np.argmax(np.dot(w, test_x[x])))
     return test_y
 
-def svm(x,y):
-    print("unimplemented svm")
+
+# SVM learning algorithm
+def svm(train_x, train_y, test_x):
+    test_y = []
+    return test_y
 
 
 #-------------------------------Main---------------------------------------#
@@ -96,12 +108,15 @@ test_x = np.genfromtxt('PA-SVM-Perceptron-KNN/test_x.txt', delimiter=',')
 num_att = train_x[0].size
 train_size = int(train_x.size/num_att)
 test_size = int(test_x.size/num_att)
-knn_test_y = []
-perceptron_test_y = []
-pa_test_y = []
+knn_test_y, perceptron_test_y, svm_test_y, pa_test_y = [], [], [], []
 
-normalize(train_x,test_x)
-knn_test_y = knn(train_x,train_y,test_x)
-perceptron_test_y = perceptron(train_x,train_y,test_x)
-pa_test_y = passive_agressive(train_x,train_y,test_x)
+
+normalize(train_x, test_x)
+knn_test_y = knn(train_x, train_y, test_x)
+perceptron_test_y = perceptron(train_x, train_y, test_x)
+pa_test_y = passive_agressive(train_x, train_y, test_x)
+
+for i in range(test_size):
+    print(
+        f"knn: {knn_test_y[i]}, perceptron: {perceptron_test_y[i]}, svm: {svm_test_y[i]}, pa: {pa_test_y[i]}")
 #--------------------------------------------------------------------------#
