@@ -1,14 +1,14 @@
 knn: 0, perceptron: 1, svm: 0, pa: 1
 knn: 0, perceptron: 1, svm: 0, pa: 1
-knn: 1, perceptron: 1, svm: 0, pa: 1
-knn: 0, perceptron: 0, svm: 0, pa: 1
+knn: 1, perceptron: 1, svm: 1, pa: 1
+knn: 0, perceptron: 1, svm: 0, pa: 1
 knn: 0, perceptron: 0, svm: 0, pa: 1
 knn: 2, perceptron: 2, svm: 2, pa: 2
 knn: 1, perceptron: 1, svm: 1, pa: 1
 knn: 2, perceptron: 2, svm: 2, pa: 2
 knn: 1, perceptron: 1, svm: 1, pa: 1
 knn: 0, perceptron: 1, svm: 0, pa: 1
-knn: 2, perceptron: 2, svm: 2, pa: 2
+knn: 2, perceptron: 1, svm: 2, pa: 2
 knn: 0, perceptron: 1, svm: 0, pa: 1
 knn: 1, perceptron: 0, svm: 0, pa: 1
 knn: 2, perceptron: 2, svm: 2, pa: 2
@@ -17,7 +17,7 @@ knn: 0, perceptron: 1, svm: 0, pa: 1
 knn: 2, perceptron: 2, svm: 2, pa: 2
 knn: 2, perceptron: 2, svm: 2, pa: 2
 knn: 0, perceptron: 1, svm: 0, pa: 1
-knn: 0, perceptron: 1, svm: 0, pa: 1
+knn: 0, perceptron: 1, svm: 1, pa: 1
 knn: 1, perceptron: 1, svm: 1, pa: 1
 knn: 2, perceptron: 2, svm: 2, pa: 2
 knn: 1, perceptron: 1, svm: 1, pa: 1
@@ -39,7 +39,7 @@ knn: 1, perceptron: 1, svm: 0, pa: 1
 knn: 2, perceptron: 2, svm: 2, pa: 2
 knn: 2, perceptron: 2, svm: 2, pa: 2
 knn: 0, perceptron: 1, svm: 1, pa: 1
-knn: 1, perceptron: 1, svm: 0, pa: 1
+knn: 1, perceptron: 1, svm: 1, pa: 1
 knn: 2, perceptron: 2, svm: 2, pa: 2
 knn: 0, perceptron: 1, svm: 0, pa: 1
 knn: 2, perceptron: 2, svm: 2, pa: 2
@@ -53,8 +53,8 @@ knn: 1, perceptron: 1, svm: 1, pa: 1
 knn: 2, perceptron: 2, svm: 2, pa: 2
 knn: 2, perceptron: 2, svm: 2, pa: 2
 knn: 1, perceptron: 1, svm: 0, pa: 1
-knn: 0, perceptron: 1, svm: 0, pa: 1
+knn: 0, perceptron: 1, svm: 1, pa: 1
 knn: 2, perceptron: 2, svm: 2, pa: 2
 knn: 1, perceptron: 1, svm: 1, pa: 1
 knn: 0, perceptron: 1, svm: 0, pa: 1
-knn: 1, perceptron: 0, svm: 0, pa: 1
+knn: 1, perceptron: 1, svm: 0, pa: 1

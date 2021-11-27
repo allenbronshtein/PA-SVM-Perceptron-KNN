@@ -22,18 +22,16 @@ def normalize():
 # Shuffle training set
 def shuffle():
     np.random.shuffle(s)
-    train_x_shuffled = train_x[s]
-    train_y_shuffled = train_y[s]
-    return zip(train_x_shuffled, train_y_shuffled)
+    return zip(train_x[s], train_y[s])
 
 
+# logs output to file
 def log():
     msg = ''
     for i in range(test_size):
         msg += f"knn: {knn_test_y[i]}, perceptron: {perceptron_test_y[i]}, svm: {svm_test_y[i]}, pa: {pa_test_y[i]}\n"
-    _out = open(OUTPUT_DIR, "w")
-    _out.write(msg)
-    _out.close()
+    with open(OUTPUT_DIR, 'w') as out:
+        out.write(msg)
 
 
 # KNN learning algorithm
@@ -110,20 +108,13 @@ def svm():
 
 
 # Main
-train_x = np.genfromtxt(TRAIN_X_DIR, delimiter=',')
+train_x, train_y = np.genfromtxt(TRAIN_X_DIR, delimiter=',')
 train_y = np.genfromtxt(TRAIN_Y_DIR).astype(int)
 test_x = np.genfromtxt(TEST_X_DIR, delimiter=',')
-num_att = train_x[0].size
-train_size = train_x.shape[0]
-test_size = test_x.shape[0]
-s = np.arange(train_x.shape[0])
+num_att, train_size, test_size = train_x[0].size, train_x.shape[0], test_x.shape[0]
 knn_test_y, perceptron_test_y, svm_test_y, pa_test_y = [], [], [], []
+s = np.arange(train_x.shape[0])
 normalize()
-
-knn()
-perceptron()
-passive_agressive()
-svm()
-
+knn(), perceptron(), passive_agressive(), svm()
 log()
 # End
