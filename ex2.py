@@ -30,7 +30,7 @@ def shuffle():
 def log():
     msg = ''
     for i in range(test_size):
-        msg += f"knn: {knn_test_y[i]}, perceptron: {perceptron_test_y[i]}, svm: 0, pa: {pa_test_y[i]}\n"
+        msg += f"knn: {knn_test_y[i]}, perceptron: {perceptron_test_y[i]}, svm: {svm_test_y[i]}, pa: {pa_test_y[i]}\n"
     _out = open(OUTPUT_DIR, "w")
     _out.write(msg)
     _out.close()
@@ -61,43 +61,52 @@ def perceptron():
             if y_hat != y:
                 w[y, :] = w[y, :] + LEARNING_RATE * x
                 w[y_hat, :] = w[y_hat, :] - LEARNING_RATE * x
-    # use the trained weight vectors to assign best label prediction to current x example
-    for i in range(test_size):
-        perceptron_test_y.append(np.argmax(np.dot(w, test_x[i])))
+    for x in test_x:
+        perceptron_test_y.append(np.argmax(np.dot(w, x)))
 
 
 # Passive agressive learning algorithm
 def passive_agressive():
     EPOCHS = 20
-    w = np.array([np.random.rand(num_att), np.random.rand(
-        num_att), np.random.rand(num_att)])
+    w = np.random.random((3, num_att))
     for _ in range(EPOCHS):
         train_set = shuffle()
         for x, y in train_set:
             w_out = np.delete(w, y, 0)
             y_hat = np.argmax(np.dot(w_out, x))
-            # get the correct label by it's place in original w
             if y == 0 or (y == 1 and y_hat == 1):
                 y_hat += 1
             loss = max(0, 1 - np.dot(w[y], x) + np.dot(w[y_hat], x))
             if loss:
                 tau = 1
                 denominator = 2 * (np.linalg.norm(x) ** 2)
-                # when denominator is not 0 change initialization by formula
                 if denominator:
                     tau = loss / denominator
-                # update w
                 w[y, :] = w[y, :] + tau * x
                 w[y_hat, :] = w[y_hat, :] - tau * x
-    # use the trained weight vectors to assign best label prediction to current x example
-    for x in range(test_size):
-        pa_test_y.append(np.argmax(np.dot(w, test_x[x])))
+    for x in test_x:
+        pa_test_y.append(np.argmax(np.dot(w, x)))
+
 
 # SVM learning algorithm
-
-
 def svm():
-    pass
+    EPOCHS, ETA, LAMBDA = 20, 1.1, 0.1
+    w = np.random.random((3, num_att))*0.01
+    for e in range(EPOCHS):
+        train_set = shuffle()
+        ETA /= (e + 1)
+        for x, y in train_set:
+            y_hat = np.argmax(np.dot(w, x))
+            w *= (1 - ETA * LAMBDA)
+            w_out = np.delete(w, y_hat, 0)
+            second_y_hat = np.argmax(np.dot(w_out, x))
+            calc = 1 - np.dot(w[y, :], x) + np.dot(w_out[second_y_hat, :], x)
+            loss = max(0, calc)
+            if loss > 0:
+                w[y, :] = w[y, :] + ETA * x
+                w[y_hat, :] = w[y_hat, :] - ETA * x
+    for x in test_x:
+        svm_test_y.append(np.argmax(np.dot(w, x)))
 
 
 # Main
