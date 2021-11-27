@@ -1,11 +1,18 @@
 import numpy as np
 from operator import itemgetter
+from sys import argv
 
 # Globals
-TRAIN_X_DIR = 'PA-SVM-Perceptron-KNN/train_x.txt'
-TRAIN_Y_DIR = 'PA-SVM-Perceptron-KNN/train_y.txt'
-TEST_X_DIR = 'PA-SVM-Perceptron-KNN/test_x.txt'
-OUTPUT_DIR = 'PA-SVM-Perceptron-KNN/output.txt'
+
+# TRAIN_X_DIR = 'PA-SVM-Perceptron-KNN/train_x.txt'
+# TRAIN_Y_DIR = 'PA-SVM-Perceptron-KNN/train_y.txt'
+# TEST_X_DIR = 'PA-SVM-Perceptron-KNN/test_x.txt'
+# OUTPUT_DIR = 'PA-SVM-Perceptron-KNN/output.txt'
+
+TRAIN_X_DIR = argv[1]
+TRAIN_Y_DIR = argv[2]
+TEST_X_DIR = argv[3]
+OUTPUT_DIR = argv[4]
 
 
 # min-max normalization
@@ -108,7 +115,7 @@ def svm():
 
 
 # Main
-train_x, train_y = np.genfromtxt(TRAIN_X_DIR, delimiter=',')
+train_x = np.genfromtxt(TRAIN_X_DIR, delimiter=',')
 train_y = np.genfromtxt(TRAIN_Y_DIR).astype(int)
 test_x = np.genfromtxt(TEST_X_DIR, delimiter=',')
 num_att, train_size, test_size = train_x[0].size, train_x.shape[0], test_x.shape[0]
