@@ -68,53 +68,49 @@ def perceptron():
 
 # Passive agressive learning algorithm
 def passive_agressive():
-    EPOCHS = 1
+    EPOCHS = 20
     w = np.array([np.random.rand(num_att), np.random.rand(
         num_att), np.random.rand(num_att)])
-    test_y = []
     for _ in range(EPOCHS):
         train_set = shuffle()
-        # predict and update
-        for x_i, y_i in train_set:
-            w_out = np.delete(w, int(y_i), 0)
-            y_hat = np.argmax(np.dot(w_out, x_i))
+        for x, y in train_set:
+            w_out = np.delete(w, y, 0)
+            y_hat = np.argmax(np.dot(w_out, x))
             # get the correct label by it's place in original w
-            if y_i == 0 or (y_i == 1 and y_hat == 1):
+            if y == 0 or (y == 1 and y_hat == 1):
                 y_hat += 1
-            loss = max(0, 1 - np.dot(w[int(y_i)], x_i) + np.dot(w[y_hat], x_i))
+            loss = max(0, 1 - np.dot(w[y], x) + np.dot(w[y_hat], x))
             if loss:
                 tau = 1
-                denominator = 2 * (np.linalg.norm(x_i) ** 2)
+                denominator = 2 * (np.linalg.norm(x) ** 2)
                 # when denominator is not 0 change initialization by formula
                 if denominator:
                     tau = loss / denominator
                 # update w
-                w[int(y_i), :] = w[int(y_i), :] + tau * x_i
-                w[y_hat, :] = w[y_hat, :] - tau * x_i
+                w[y, :] = w[y, :] + tau * x
+                w[y_hat, :] = w[y_hat, :] - tau * x
     # use the trained weight vectors to assign best label prediction to current x example
     for x in range(test_size):
-        test_y.append(np.argmax(np.dot(w, test_x[x])))
-    return test_y
-
+        pa_test_y.append(np.argmax(np.dot(w, test_x[x])))
 
 # SVM learning algorithm
+
+
 def svm():
-    test_y = []
-    return test_y
+    pass
 
 
 # Main
 train_x = np.genfromtxt(TRAIN_X_DIR, delimiter=',')
-train_y = np.genfromtxt(TRAIN_Y_DIR)
+train_y = np.genfromtxt(TRAIN_Y_DIR).astype(int)
 test_x = np.genfromtxt(TEST_X_DIR, delimiter=',')
 num_att = train_x[0].size
 train_size = train_x.shape[0]
 test_size = test_x.shape[0]
 s = np.arange(train_x.shape[0])
 knn_test_y, perceptron_test_y, svm_test_y, pa_test_y = [], [], [], []
-
-
 normalize()
+
 knn()
 perceptron()
 passive_agressive()
