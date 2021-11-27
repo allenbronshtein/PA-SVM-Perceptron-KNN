@@ -18,4 +18,5 @@ species.
 
 
 To run the code:
+
     python ex2.py <train_x_path> <train_y_path> <test_x_path> <output_path>
