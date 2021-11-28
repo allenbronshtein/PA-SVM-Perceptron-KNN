@@ -44,10 +44,10 @@ def log():
 # KNN learning algorithm
 def knn():
     KN = 7
-    for x_test in test_x:
+    for x in test_x:
         dist, classes = [], {0: 0, 1: 0, 2: 0}
         for i in range(train_size):
-            dist.append([np.linalg.norm(x_test - train_x[i]), train_y[i]])
+            dist.append([np.linalg.norm(x - train_x[i]), train_y[i]])
         dist.sort(key=itemgetter(0))
         nearest_neighbors = dist[:KN]
         for i in range(KN):
@@ -57,7 +57,7 @@ def knn():
 
 # Perceptron learning algorithm
 def perceptron():
-    LEARNING_RATE, EPOCHS = 0.2, 20
+    LEARNING_RATE, EPOCHS = 0.2, 5
     w = np.array([np.zeros(num_att), np.zeros(num_att), np.zeros(num_att)])
     for _ in range(EPOCHS):
         train_set = shuffle()
@@ -72,7 +72,7 @@ def perceptron():
 
 # Passive agressive learning algorithm
 def passive_agressive():
-    EPOCHS = 20
+    EPOCHS = 1
     w = np.random.random((3, num_att))
     for _ in range(EPOCHS):
         train_set = shuffle()
@@ -96,7 +96,7 @@ def passive_agressive():
 # SVM learning algorithm
 def svm():
     EPOCHS, ETA, LAMBDA = 20, 1.1, 0.1
-    w = np.random.random((3, num_att))*0.01
+    w = np.random.random((3, num_att))
     for e in range(EPOCHS):
         train_set = shuffle()
         ETA /= (e + 1)
@@ -104,9 +104,8 @@ def svm():
             y_hat = np.argmax(np.dot(w, x))
             w *= (1 - ETA * LAMBDA)
             w_out = np.delete(w, y_hat, 0)
-            second_y_hat = np.argmax(np.dot(w_out, x))
-            calc = 1 - np.dot(w[y, :], x) + np.dot(w_out[second_y_hat, :], x)
-            loss = max(0, calc)
+            second = np.argmax(np.dot(w_out, x))
+            loss = max(0, 1 - np.dot(w[y, :], x) + np.dot(w_out[second, :], x))
             if loss > 0:
                 w[y, :] = w[y, :] + ETA * x
                 w[y_hat, :] = w[y_hat, :] - ETA * x
