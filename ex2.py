@@ -4,26 +4,24 @@ from sys import argv
 
 # Globals
 
-# TRAIN_X_DIR = 'PA-SVM-Perceptron-KNN/train_x.txt'
-# TRAIN_Y_DIR = 'PA-SVM-Perceptron-KNN/train_y.txt'
-# TEST_X_DIR = 'PA-SVM-Perceptron-KNN/test_x.txt'
-# OUTPUT_DIR = 'PA-SVM-Perceptron-KNN/output.txt'
+TRAIN_X_DIR = 'PA-SVM-Perceptron-KNN/train_x.txt'
+TRAIN_Y_DIR = 'PA-SVM-Perceptron-KNN/train_y.txt'
+TEST_X_DIR = 'PA-SVM-Perceptron-KNN/test_x.txt'
+OUTPUT_DIR = 'PA-SVM-Perceptron-KNN/output.txt'
 
-TRAIN_X_DIR = argv[1]
-TRAIN_Y_DIR = argv[2]
-TEST_X_DIR = argv[3]
-OUTPUT_DIR = argv[4]
+# TRAIN_X_DIR = argv[1]
+# TRAIN_Y_DIR = argv[2]
+# TEST_X_DIR = argv[3]
+# OUTPUT_DIR = argv[4]
 
 
 # min-max normalization
-def normalize():
-    max_v, min_v = np.amax(train_x, axis=0), np.amin(train_x, axis=0)
-    for i in range(train_size):
-        for j in range(num_att):
-            train_x[i][j] = (train_x[i][j] - min_v[j]) / (max_v[j] - min_v[j])
-            if i < test_size:
-                test_x[i][j] = (test_x[i][j] - min_v[j]) / \
-                    (max_v[j] - min_v[j])
+def normalize(arr):
+    normalized_array = np.array(arr)
+    for col in range(arr.shape[1]):
+        normalized_array[:, col] = (
+            arr[:, col] - np.mean(arr[:, col])) / np.std(arr[:, col])
+    return normalized_array
 
 
 # Shuffle training set
@@ -117,10 +115,13 @@ def svm():
 train_x = np.genfromtxt(TRAIN_X_DIR, delimiter=',')
 train_y = np.genfromtxt(TRAIN_Y_DIR).astype(int)
 test_x = np.genfromtxt(TEST_X_DIR, delimiter=',')
+train_x = normalize(train_x)
+test_x = normalize(test_x)
+train_x = np.c_[train_x, np.ones((train_x.shape[0], 1))]
+test_x = np.c_[test_x, np.ones((test_x.shape[0], 1))]
 num_att, train_size, test_size = train_x[0].size, train_x.shape[0], test_x.shape[0]
 knn_test_y, perceptron_test_y, svm_test_y, pa_test_y = [], [], [], []
 s = np.arange(train_x.shape[0])
-normalize()
 knn(), perceptron(), passive_agressive(), svm()
 log()
 # End
