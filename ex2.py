@@ -2,12 +2,42 @@ import numpy as np
 from operator import itemgetter
 from sys import argv
 
+# calculate accuracy for testing
+
+
+def accuracy():
+    knn_success = 0
+    perceptron_success = 0
+    svm_success = 0
+    pa_success = 0
+    for i in range(test_size):
+        if knn_test_y[i] == test_y[i]:
+            knn_success += 1
+        if perceptron_test_y[i] == test_y[i]:
+            perceptron_success += 1
+        if svm_test_y[i] == test_y[i]:
+            svm_success += 1
+        if pa_test_y[i] == test_y[i]:
+            pa_success += 1
+    knn_accuracy = (knn_success / test_size) * 100
+    perceptron_accuracy = (perceptron_success / test_size) * 100
+    svm_accuracy = (svm_success / test_size) * 100
+    pa_accuracy = (pa_success / test_size) * 100
+
+    print('knn accuracy: ', knn_accuracy)
+    print('perceptron accuracy: ', perceptron_accuracy)
+    print('svm accuracy: ', svm_accuracy)
+    print('pa accuracy: ', pa_accuracy)
+
 # Globals
+
 
 TRAIN_X_DIR = 'PA-SVM-Perceptron-KNN/train_x.txt'
 TRAIN_Y_DIR = 'PA-SVM-Perceptron-KNN/train_y.txt'
 TEST_X_DIR = 'PA-SVM-Perceptron-KNN/test_x.txt'
 OUTPUT_DIR = 'PA-SVM-Perceptron-KNN/output.txt'
+TEST_Y_DIR = 'PA-SVM-Perceptron-KNN/test_y.txt'
+
 
 # TRAIN_X_DIR = argv[1]
 # TRAIN_Y_DIR = argv[2]
@@ -15,13 +45,12 @@ OUTPUT_DIR = 'PA-SVM-Perceptron-KNN/output.txt'
 # OUTPUT_DIR = argv[4]
 
 
-# min-max normalization
+# zscore normalization
 def normalize(arr):
-    normalized_array = np.array(arr)
     for col in range(arr.shape[1]):
-        normalized_array[:, col] = (
-            arr[:, col] - np.mean(arr[:, col])) / np.std(arr[:, col])
-    return normalized_array
+        m, d = np.mean(arr[:, col]),  np.std(arr[:, col])
+        if d:
+            arr[:, col] = (arr[:, col] - m) / d
 
 
 # Shuffle training set
@@ -41,7 +70,7 @@ def log():
 
 # KNN learning algorithm
 def knn():
-    KN = 7
+    KN = 3
     for x in test_x:
         dist, classes = [], {0: 0, 1: 0, 2: 0}
         for i in range(train_size):
@@ -55,7 +84,7 @@ def knn():
 
 # Perceptron learning algorithm
 def perceptron():
-    LEARNING_RATE, EPOCHS = 0.2, 5
+    LEARNING_RATE, EPOCHS = 0.2, 20
     w = np.array([np.zeros(num_att), np.zeros(num_att), np.zeros(num_att)])
     for _ in range(EPOCHS):
         train_set = shuffle()
@@ -70,7 +99,7 @@ def perceptron():
 
 # Passive agressive learning algorithm
 def passive_agressive():
-    EPOCHS = 1
+    EPOCHS = 20
     w = np.random.random((3, num_att))
     for _ in range(EPOCHS):
         train_set = shuffle()
@@ -115,8 +144,7 @@ def svm():
 train_x = np.genfromtxt(TRAIN_X_DIR, delimiter=',')
 train_y = np.genfromtxt(TRAIN_Y_DIR).astype(int)
 test_x = np.genfromtxt(TEST_X_DIR, delimiter=',')
-train_x = normalize(train_x)
-test_x = normalize(test_x)
+normalize(train_x), normalize(test_x)
 train_x = np.c_[train_x, np.ones((train_x.shape[0], 1))]
 test_x = np.c_[test_x, np.ones((test_x.shape[0], 1))]
 num_att, train_size, test_size = train_x[0].size, train_x.shape[0], test_x.shape[0]
@@ -124,4 +152,7 @@ knn_test_y, perceptron_test_y, svm_test_y, pa_test_y = [], [], [], []
 s = np.arange(train_x.shape[0])
 knn(), perceptron(), passive_agressive(), svm()
 log()
+
+test_y = np.genfromtxt(TEST_Y_DIR).astype(int)
+accuracy()
 # End
