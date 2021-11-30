@@ -2,47 +2,42 @@ import numpy as np
 from operator import itemgetter
 from sys import argv
 
-# calculate accuracy for testing
+# def accuracy():
+#     knn_success = 0
+#     perceptron_success = 0
+#     svm_success = 0
+#     pa_success = 0
+#     for i in range(test_size):
+#         if knn_test_y[i] == test_y[i]:
+#             knn_success += 1
+#         if perceptron_test_y[i] == test_y[i]:
+#             perceptron_success += 1
+#         if svm_test_y[i] == test_y[i]:
+#             svm_success += 1
+#         if pa_test_y[i] == test_y[i]:
+#             pa_success += 1
+#     knn_accuracy = (knn_success / test_size) * 100
+#     perceptron_accuracy = (perceptron_success / test_size) * 100
+#     svm_accuracy = (svm_success / test_size) * 100
+#     pa_accuracy = (pa_success / test_size) * 100
 
-
-def accuracy():
-    knn_success = 0
-    perceptron_success = 0
-    svm_success = 0
-    pa_success = 0
-    for i in range(test_size):
-        if knn_test_y[i] == test_y[i]:
-            knn_success += 1
-        if perceptron_test_y[i] == test_y[i]:
-            perceptron_success += 1
-        if svm_test_y[i] == test_y[i]:
-            svm_success += 1
-        if pa_test_y[i] == test_y[i]:
-            pa_success += 1
-    knn_accuracy = (knn_success / test_size) * 100
-    perceptron_accuracy = (perceptron_success / test_size) * 100
-    svm_accuracy = (svm_success / test_size) * 100
-    pa_accuracy = (pa_success / test_size) * 100
-
-    print('knn accuracy: ', knn_accuracy)
-    print('perceptron accuracy: ', perceptron_accuracy)
-    print('svm accuracy: ', svm_accuracy)
-    print('pa accuracy: ', pa_accuracy)
+#     print('knn accuracy: ', knn_accuracy)
+#     print('perceptron accuracy: ', perceptron_accuracy)
+#     print('svm accuracy: ', svm_accuracy)
+#     print('pa accuracy: ', pa_accuracy)
 
 # Globals
+# TRAIN_X_DIR = 'PA-SVM-Perceptron-KNN/train_x.txt'
+# TRAIN_Y_DIR = 'PA-SVM-Perceptron-KNN/train_y.txt'
+# TEST_X_DIR = 'PA-SVM-Perceptron-KNN/test_x.txt'
+# OUTPUT_DIR = 'PA-SVM-Perceptron-KNN/output.txt'
+# TEST_Y_DIR = 'PA-SVM-Perceptron-KNN/test_y.txt'
 
 
-TRAIN_X_DIR = 'PA-SVM-Perceptron-KNN/train_x.txt'
-TRAIN_Y_DIR = 'PA-SVM-Perceptron-KNN/train_y.txt'
-TEST_X_DIR = 'PA-SVM-Perceptron-KNN/test_x.txt'
-OUTPUT_DIR = 'PA-SVM-Perceptron-KNN/output.txt'
-TEST_Y_DIR = 'PA-SVM-Perceptron-KNN/test_y.txt'
-
-
-# TRAIN_X_DIR = argv[1]
-# TRAIN_Y_DIR = argv[2]
-# TEST_X_DIR = argv[3]
-# OUTPUT_DIR = argv[4]
+TRAIN_X_DIR = argv[1]
+TRAIN_Y_DIR = argv[2]
+TEST_X_DIR = argv[3]
+OUTPUT_DIR = argv[4]
 
 
 # zscore normalization
@@ -153,6 +148,6 @@ s = np.arange(train_x.shape[0])
 knn(), perceptron(), passive_agressive(), svm()
 log()
 
-test_y = np.genfromtxt(TEST_Y_DIR).astype(int)
-accuracy()
+# test_y = np.genfromtxt(TEST_Y_DIR).astype(int)
+# accuracy()
 # End
